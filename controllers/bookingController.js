@@ -112,11 +112,18 @@ exports.getAllBookings = async (req, res) => {
 exports.getAvailableTimeSlots = async (req, res) => {
   try {
     const { date } = req.query; // Get the selected date from query parameters
-    console.log("Requested date:", date); // Log the requested date
+
+    // Convert the date string into a Date object for querying
+    const startOfDay = new Date(date + 'T00:00:00'); // Start of the day
+    const endOfDay = new Date(date + 'T23:59:59'); // End of the day
 
     // Fetch all bookings for the selected date
-    const bookings = await Booking.find({ date });
-    console.log("Bookings found:", bookings); // Log the bookings found
+    const bookings = await Booking.find({
+      date: {
+        $gte: startOfDay,
+        $lt: endOfDay,
+      },
+    });
 
     // Extract booked time slots
     const bookedTimeSlots = bookings.map((booking) => booking.time);
