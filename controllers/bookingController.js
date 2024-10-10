@@ -109,13 +109,14 @@ exports.getAllBookings = async (req, res) => {
   }
 };
 
-// Get available time slots for a selected date
 exports.getAvailableTimeSlots = async (req, res) => {
   try {
     const { date } = req.query; // Get the selected date from query parameters
+    console.log("Requested date:", date); // Log the requested date
 
     // Fetch all bookings for the selected date
     const bookings = await Booking.find({ date });
+    console.log("Bookings found:", bookings); // Log the bookings found
 
     // Extract booked time slots
     const bookedTimeSlots = bookings.map((booking) => booking.time);
